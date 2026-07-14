@@ -1,0 +1,133 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overscroll-behavior-y: none;
+    font-family: 'Poppins', sans-serif;
+    background: #f5f7ff;    
+    color: #124559;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+header {
+    background-color: white;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.quiz-title {
+    float: inline-start;
+    align-items: center;
+
+}
+
+.quiz-title img {
+    height: 50px;
+    width: auto;
+}
+
+.quiz-title h3 {
+    color: #3a0ca3;
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+/* Timer */
+.timer {
+    font-weight: 500;
+    padding: 8px 15px;
+    border-radius: 30px;
+    border: 1px solid #dc3545;
+    background-color: #dc354617;
+    color: #dc3545;
+    align-items: center;
+    float: inline-end;
+}
+
+/* Question Card */
+.question {
+    background: white;
+    padding: 30px;
+    border-radius: 18px;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.326);
+    max-width: 700px;
+    margin: auto;
+}
+
+.question h5 {
+    margin-bottom: 20px;
+    color: #ffa62b;
+    font-size: 0.95rem;
+}
+
+.question h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+input[type=radio]{
+    width: 22px;
+    height: 18px;
+    border: 2px solid white;
+    margin-right: 12px;
+}
+
+/* Options */
+.options label {
+    background: white;
+    color: #124559;
+    padding: 12px 15px;
+    margin-bottom: 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    cursor: pointer;
+    display: block;
+    gap: 15px;
+    transition: 0.3s;
+}
+
+.options label:hover {
+    transform: scale(1.01);
+    background: #f8fafc;
+    box-shadow: 0 12px 25px rgba(36, 36, 36, 0.137);
+    border-color: #4cc9f0;
+}
+
+/* Previou, Next and Submit button */
+.btn {
+    display: inline-block;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    margin: 15px 10px 0px 10px;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+}
+
+.btn-prev {
+    background: #598392;
+}
+
+.btn-next {
+    background: #28a745;
+}
+
+.btn-submit {
+    background: #dc3545;
+}
+

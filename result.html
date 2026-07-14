@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Result</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!--icon-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="nav_footer.css" rel="stylesheet">
+    <link href="result.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="./images/logo2.png"> STACKQUIZ
+                </div>
+
+                <ul class="nav-links">
+                    <li><a href="index.html"><i class="fas fa-home me-1"></i> Home</a></li>
+                    <li><a href="categories.html"><i class="fas fa-compass me-1"></i> Categories</a></li>
+                    <li><a href="result.html" class="active"><i class="fas fa-chart-line me-1"></i> Result</a></li>
+                </ul>
+
+                <div class="profile">
+                    <button class="profile-btn"><img src="./images/user-profile.png"> Profile</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="main">
+        <div class="result">
+            <div class="text-center">
+                <div class="performance">
+                    <i class="fas fa-trophy me-2"></i> QUIZ PERFORMANCE
+                </div>
+            </div>
+
+            <h2>Congratulation!</h2>
+
+            <!-- Score -->
+            <div class="circle" id="scoreBox">
+                <span class="score-value" id="score-value">85</span>
+                <span class="score-total">out of 100</span>
+            </div>
+
+            <!-- Percentage -->
+            <h4 class="persentage">Percentage : <span id="percentBox"></span></h4>
+            <div class="progress mt-3" style="height: 20px;">
+                <div id="progressBar" class="progress-bar" style="width: 0%">
+                </div>
+            </div>
+
+            <!-- Correct / Wrong -->
+            <div class="answer">
+                <div class="answer-box correct">
+                    <h4 id="correctBox"></h4>
+                    <p><i class="fas fa-check-circle fs-2.5" style="color:#10b981;"></i> Correct</p>
+                </div>
+                <div class="answer-box wrong">
+                    <h4 id="wrongBox"></h4>
+                    <p><i class="fas fa-times-circle fs-2.5" style="color:#ef4444;"></i> Wrong</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="result">
+            <div class="result-details">
+                <div class="detail-box">
+                    <h3><i class="fas fa-check-circle"></i> Correct Answers</h3>
+                    <p id="correct-answers"></p>
+                    <div class="progress-container">
+                        <div class="progress-label">
+                            <span>Accuracy</span>
+                            <span id="accuracy-rate"></span>
+                        </div>
+                        <div class="progress-bar2">
+                            <div class="progress-fill" id="accuracy-bar" style="width: 85%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-box">
+                    <h3><i class="fas fa-clock"></i> Time Taken</h3>
+                    <p id="time-taken"></p>
+                    <div class="progress-container">
+                        <div class="progress-label">
+                            <span>Performance</span>
+                            <span id="performance-text"></span>
+                        </div>
+                        <div class="progress-bar2">
+                            <div class="progress-fill" id="performance-bar" style="width: 65%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="categories.html" class="btn btn-retake"><i class="fas fa-rotate-right"></i> Retake Categories</a>
+            <a href="index.html" class="btn btn-home"><i class="fas fa-home"></i> Back to Home</a>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>QuizStack</h3>
+                    <p>Your ultimate destination for fun and challenging quizzes. Test your knowledge, learn new facts,
+                        and
+                        compete with friends.</p>
+                    <div class="social">
+                        <img src="./images/google.png" alt="Google Logo" class="social-img">
+                        <img src="./images/facebook.png" alt="Google Logo" class="social-img">
+                        <img src="./images/instagram.png" alt="Google Logo" class="social-img">
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <p>Home</p>
+                    <p>Categories</p>
+                    <p>Result</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Categories</h3>
+                    <p>Javascript</p>
+                    <p>Python</p>
+                    <p>HTML</p>
+                    <p>CSS</p>
+                    <p>React</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <p>support@quizstack.com</p>
+                    <p> +1 (555) 123-4567</p>
+                    <p>123 Quiz Street, Knowledge City</p>
+                </div>
+            </div>
+
+            <div class="copyright">
+                <p>&copy; 2026 <strong>QuizStack</strong> | All Rights Reserved</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let score = localStorage.getItem("score");
+        let total = localStorage.getItem("total");
+
+        if (score === null || total === null) {
+            score = 0;
+            total = 0;
+        } else {
+            score = parseInt(score);
+            total = parseInt(total);
+        }
+
+        let percent = total > 0 ? Math.round((score / total) * 100) : 0;
+        let wrong = total - score;
+
+        let scoreOutOf100 = total > 0 ? Math.round((score / total) * 100) : 0;
+        document.getElementById("score-value").innerText = scoreOutOf100;
+        document.getElementById("percentBox").innerText = percent + "%";
+        document.getElementById("correctBox").innerText = score;
+        document.getElementById("wrongBox").innerText = wrong;
+
+        $(document).ready(function () {
+            let percent = total > 0 ? Math.round((score / total) * 100) : 0;
+            $("#progressBar").animate({
+                width: percent + "%"
+            }, 1000);
+            $("#progressBar").text(percent + "%");
+
+            if (percent >= 50) {
+                $("h2").text("Congratulations!");
+            } else {
+                $("h2").text("Better Luck! Next Time");
+            }
+
+            // Correct / Total
+            document.getElementById("correct-answers").innerText = score + "/" + total;
+            document.getElementById("accuracy-rate").innerText = percent + "%";
+            document.getElementById("accuracy-bar").style.width = percent + "%";
+
+            let timeTaken = parseInt(localStorage.getItem("timeTaken")) || 0;
+            let minutes = Math.floor(timeTaken / 60);
+            let seconds = timeTaken % 60;
+
+            if (seconds < 10) seconds = "0" + seconds;
+
+            document.getElementById("time-taken").innerText = minutes + ":" + seconds;
+
+            let performance = "";
+
+            if (percent >= 80) {
+                performance = '<i class="fas fa-trophy me-2" style="color:#fbbf24;"></i> Excellent';
+                document.getElementById("performance-bar").style.width = "100%";
+            }
+            else if (percent >= 50) {
+                performance = '<i class="fas fa-thumbs-up me-2" style="color:#3b82f6;"></i> Good';
+                document.getElementById("performance-bar").style.width = "80%";
+            }
+            else {
+                performance = '<i class="fas fa-face-frown me-2" style="color:#c57315fd;"></i> Needs Improvement';
+                document.getElementById("performance-bar").style.width = "45%";
+            }
+            document.getElementById("performance-text").innerHTML = performance;
+
+        });
+
+
+    </script>
+</body>
+
+</html>

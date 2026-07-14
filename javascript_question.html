@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Question</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="quiz_que.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="timer.js"></script>
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <div class="quiz-title">
+                <h3><img src="./images/confuse_boy.png"> Javascript Quiz</h3>
+            </div>
+            <div class="timer">Time Left: <span id="time">05:00</span></div>
+        </div>
+    </header>
+    <!-- QUESTION SECTION -->
+    <section class="mt-5">
+        <div class="question" id="questionBox">
+            <h5 id="qno">Question 1/3</h5>
+            <h4 id="question"></h4>
+
+            <div class="options" id="options"></div>
+
+            <div class="d-flex justify-content-between mt-3">
+                <button class="btn btn-prev" id="prevButton" onclick="prev()">Previous</button>
+                <button class="btn btn-next" id="nextButton" onclick="next()">Next</button>
+                <button class="btn btn-submit" id="submitButton" onclick="submitQuiz()">Submit</button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const easyQuestions = [
+            { question: "What is the output of the following code? \n console.log(typeof NaN);", options: ["number", "undefined", "NaN", "null"], answer: 0 },
+            { question: "How do you check if a variable is an array?", options: ["typeof myVar === \"array\"", "Array.isArray(myVar)", "myVar.isArray()", "myVar.type === \"array\""], answer: 1 },
+            { question: "What will console.log(Boolean(0)) output?", options: ["True", "False", "0", "undefined"], answer: 2 },
+            { question: "What is the result of 5 + '5' in JavaScript?", options: ["10", "55", "error", "\"10\""], answer: 1 },
+            { question: "What will console.log(!!\"hello\") output?", options: ["true", "false", "\"hello\"", "error"], answer: 0 },
+            { question: "undefined and null are the same in JavaScript.", options: ["True", "False"], answer: 1 },
+            { question: "Which is correct variable name?", options: ["1name", "_name", "@name", "#name"], answer: 1 },
+            { question: "Which is not data type?", options: ["string", "number", "float", "boolean"], answer: 1 },
+            { question: "Which function prints output?", options: ["print()", "console.log()", "echo()", "write()"], answer: 1 },
+            { question: "undefined means?", options: ["no value", "zero", "false", "null"], answer: 0 }
+        ];
+
+        const mediumQuestions = [
+            { question: "What is output? \n console.log([]==false)", options: ["true", "false", "error", "undefined"], answer: 0 },
+            { question: "Difference between == and === ?", options: ["value only", "type only", "value+type", "none"], answer: 2 },
+            { question: "What is output? \n console.log('5'-2)", options: ["3", "52", "error", "NaN"], answer: 0 },
+            { question: "Which method converts JSON to object?", options: ["JSON.parse()", "JSON.stringify()", "JSON.convert()", "JSON.toObj()"], answer: 0 },
+            { question: "What is output? \n console.log(typeof [])", options: ["array", "object", "list", "undefined"], answer: 1 },
+            { question: "Which loop executes at least once?", options: ["for", "while", "do while", "foreach"], answer: 2 },
+            { question: "What is output? \n console.log(null==undefined)", options: ["true", "false", "error", "NaN"], answer: 0 },
+            { question: "Which is block scope?", options: ["var", "let", "const", "both let & const"], answer: 3 },
+            { question: "What is output? \n console.log(!!0)", options: ["true", "false", "0", "undefined"], answer: 1 },
+            { question: "Which array method removes first element?", options: ["pop()", "shift()", "slice()", "splice()"], answer: 1 }
+        ];
+
+        const hardQuestions = [
+            { question: "What is output? \n let a = 10;\n function test(){\n console.log(a);\n let a = 20;\n }\n test();", options: ["10", "20", "undefined", "error"], answer: 3 },
+            { question: "What is closure in JavaScript?", options: ["function with outer scope access", "loop", "object", "array"], answer: 0 },
+            { question: "What is output? \n console.log([] + {})", options: ["[object Object]", "{}", "error", "NaN"], answer: 0 },
+            { question: "Why use promises?", options: ["sync code", "async handling", "looping", "styling"], answer: 1 },
+            { question: "What is output? \n console.log(0=='0' && 0==='0')", options: ["true", "false", "error", "undefined"], answer: 1 },
+            { question: "this keyword refers to?", options: ["current object", "window always", "parent always", "none"], answer: 0 },
+            { question: "What is output? \n const obj={a:1}; const b=obj; b.a=5; console.log(obj.a);", options: ["1", "5", "undefined", "error"], answer: 1 },
+            { question: "Event bubbling means?", options: ["top to bottom", "bottom to top", "stop event", "reload"], answer: 1 },
+            { question: "What is output? \n console.log(typeof function(){})", options: ["object", "function", "undefined", "null"], answer: 1 },
+            { question: "What is hoisting?", options: ["moving variables to top", "looping", "styling", "error"], answer: 0 }
+        ];
+
+        let level = localStorage.getItem("level");
+
+        let questions;
+
+        if (level === "easy") {
+            questions = easyQuestions;
+        }
+        else if (level === "medium") {
+            questions = mediumQuestions;
+        }
+        else if (level === "hard") {
+            questions = hardQuestions;
+        }
+        else {
+            alert("Please select level first");
+            window.location.href = "level.html";
+        }
+        let index = 0;
+        let userAnswers = [];
+
+        function loadQuestion() {
+            let q = questions[index];
+
+            $("#questionBox").fadeOut(200, function () {
+                document.getElementById("qno").innerText = "Question " + (index + 1) + "/" + questions.length;
+                document.getElementById("question").innerText = q.question;
+
+                let html = "";
+                for (let i = 0; i < q.options.length; i++) {
+                    let checked = userAnswers[index] == i ? "checked" : "";
+                    html += "<label>" +
+                        "<input type='radio' name='ans' " + checked + " onclick='selectOption(" + i + ")'>" +
+                        q.options[i] +
+                        "</label>";
+                }
+
+                document.getElementById("options").innerHTML = html;
+                $("#questionBox").fadeIn(200);
+            });
+
+            if (index == 0) {
+                document.getElementById("prevButton").style.display = "none";
+            } else {
+                document.getElementById("prevButton").style.display = "inline-block";
+            }
+
+            if (index == questions.length - 1) {
+                document.getElementById("nextButton").style.display = "none";
+                document.getElementById("submitButton").style.display = "inline-block";
+            } else {
+                document.getElementById("nextButton").style.display = "inline-block";
+                document.getElementById("submitButton").style.display = "none";
+            }
+        }
+
+        function selectOption(i) {
+            userAnswers[index] = i;
+        }
+
+        function next() {
+            if (index < questions.length - 1) {
+                index++;
+                loadQuestion();
+            }
+        }
+
+        function prev() {
+            if (index > 0) {
+                index--;
+                loadQuestion();
+            }
+        }
+
+        function submitQuiz() {
+            stopTimer();
+            let score = 0;
+
+            for (let i = 0; i < questions.length; i++) {
+                if (userAnswers[i] == undefined) {
+                    alert("Please answer all questions before submitting.");
+                    return;
+                }
+            }
+
+            for (let i = 0; i < questions.length; i++) {
+                if (questions[i].answer == userAnswers[i]) {
+                    score++;
+                }
+            }
+
+            localStorage.setItem("score", score);
+            localStorage.setItem("total", questions.length);
+
+            let timeTaken = (5 * 60) - totalTime;
+            localStorage.setItem("score", score);
+            localStorage.setItem("total", questions.length);
+            localStorage.setItem("timeTaken", timeTaken);
+
+            window.location.href = "result.html";
+        }
+
+        window.onload = function () {
+            document.getElementById("submitButton").style.display = "none";
+            loadQuestion();
+            startTimer();
+        }
+    </script>
+</body>
+
+</html>

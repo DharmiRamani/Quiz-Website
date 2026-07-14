@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Quizee Game</title>
+    <link href="login_signup.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <div id="loader" class="loader">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-2">Redirecting to Home...</p>
+    </div>
+    <!-- Login box -->
+    <div class="login-box">
+        <!-- left box -->
+        <div class="left-box">
+            <div class="logo-container">
+                <img src="./images/welcome_img.png" alt="Welcome image">
+            </div>
+        </div>
+
+        <!-- Right box -->
+        <div class="right-box">
+            <h2>Login to Your Account</h2>
+            <p>Please enter your credentials to continue</p>
+
+            <form onsubmit="return validatelogin()" name="frm">
+                <div class="input-group">
+                    <input type="text" placeholder="abc00@gmail.com" name="txtemail">
+                    <small id="emailerror" class="error"></small>
+                </div>
+                <div class="input-group">
+                    <input type="password" placeholder="Password" name="password">
+                    <small id="passworderror" class="error"></small>
+                </div>
+
+                <div class="option-row">
+                    <a href="#">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="login-sing-btn">
+                    LOGIN
+                </button>
+            </form>
+
+            <div class="separator">
+                or continue with
+            </div>
+
+            <div class="social-login">
+                <button class="social-btn">
+                    <img src="./images/google.png" class="social-img" alt="Google Image">
+                </button>
+                <button class="social-btn">
+                    <img src="./images/facebook.png" class="social-img" alt="Facebook Image">
+                </button>
+            </div>
+
+
+            <div class="signup-login-link">
+                Don't have an account? <a href="signup_page.html">Sign up here</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function validatelogin() {
+            var email = document.frm.txtemail.value;
+            var password = document.frm.password.value;
+
+            document.getElementById("emailerror").innerHTML = "";
+            document.getElementById("passworderror").innerHTML = "";
+
+            if (email === "") {
+                document.getElementById("emailerror").innerHTML = "Email is required";
+                document.frm.txtemail.focus();
+                return false;
+            }
+            if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})$/)) {
+                document.getElementById("emailerror").innerHTML = "Enter valid email";
+                document.frm.txtemail.focus();
+                return false;
+            }
+
+            if (password === "") {
+                document.getElementById("passworderror").innerHTML = "Password is required";
+                document.frm.password.focus();
+                return false;
+            }
+
+            alert("Login successful!");
+            document.getElementById("loader").style.display = "flex";
+            setTimeout(function () {
+                window.location.href = "index.html";
+            }, 2000);
+
+            return false;
+        }
+    </script>
+    <script>
+$(document).ready(function () {
+
+    $(".login-box").fadeOut(300, function () {
+        $(this).css("flex-direction", "row").fadeIn(300);
+    });
+
+});
+</script>
+</body>
+
+</html>

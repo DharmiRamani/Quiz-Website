@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Question</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="quiz_que.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="timer.js"></script>
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <div class="quiz-title">
+                <h3><img src="./images/confuse_boy.png"> CSS Quiz</h3>
+            </div>
+            <div class="timer">Time Left: <span id="time">05:00</span></div>
+        </div>
+    </header>
+    <!-- QUESTION SECTION -->
+    <section class="mt-5">
+        <div class="question" id="questionBox">
+            <h5 id="qno">Question 1/3</h5>
+            <h4 id="question"></h4>
+
+            <div class="options" id="options"></div>
+
+            <div class="d-flex justify-content-between mt-3">
+                <button class="btn btn-prev" id="prevButton" onclick="prev()">Previous</button>
+                <button class="btn btn-next" id="nextButton" onclick="next()">Next</button>
+                <button class="btn btn-submit" id="submitButton" onclick="submitQuiz()">Submit</button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const easyQuestions = [
+            { question: "Which property changes text color?", options: ["font-color", "color", "text-color", "style"], answer: 1 },
+            { question: "Which unit is relative?", options: ["px", "%", "cm", "mm"], answer: 1 },
+            { question: "What is output? \n p {\n display:none;\n }", options: ["hidden", "visible", "block", "inline"], answer: 0 },
+            { question: "What is output? \n div {\n width:100px;\n height:50px;\n }", options: ["box created", "text only", "error", "none"], answer: 0 },
+            { question: "Which property adds border?", options: ["outline", "border", "edge", "frame"], answer: 1 },
+            { question: "What is output? \n p { color:red; }", options: ["red text", "blue text", "black", "none"], answer: 0 },
+            { question: "Which property sets background?", options: ["bg", "background", "color", "back"], answer: 1 },
+            { question: "What is output? \n div {\n visibility:hidden;\n height:50px;\n }", options: ["hidden but space", "removed", "visible", "error"], answer: 0 },
+            { question: "Which property is for font size?", options: ["font", "size", "font-size", "text-size"], answer: 2 },
+            { question: "What is output? \n div {\n margin:10px;\n padding:5px;\n }", options: ["space inside+outside", "only inside", "only outside", "none"], answer: 0 }
+        ];
+
+        const mediumQuestions = [
+            { question: "Difference between margin and padding?", options: ["inside vs outside", "outside vs inside", "same", "none"], answer: 1 },
+            { question: "What is output? \n div {\n display:flex;\n }", options: ["flex container", "block", "hidden", "inline"], answer: 0 },
+            { question: "Which selector selects id?", options: ["#id", ".id", "*id", "&id"], answer: 0 },
+            { question: "What is output? \n div {\n width:50%;\n }", options: ["half parent", "full", "fixed", "none"], answer: 0 },
+            { question: "Which is pseudo class?", options: [":hover", "::before", "#id", ".class"], answer: 0 },
+            { question: "What is output? \n div {\n position:relative;\n top:10px;\n }", options: ["move down", "move up", "no move", "error"], answer: 0 },
+            { question: "Which property used in grid?", options: ["grid-template", "flex", "inline", "block"], answer: 0 },
+            { question: "What is output? \n div {\n opacity:0;\n }", options: ["invisible", "visible", "error", "none"], answer: 0 },
+            { question: "Which property controls layering?", options: ["z-index", "layer", "index", "position"], answer: 0 },
+            { question: "What is output? \n div {\n overflow:hidden;\n }", options: ["hide overflow", "scroll", "visible", "none"], answer: 0 }
+        ];
+
+        const hardQuestions = [
+            { question: "What is output? \n div {\n width:100px;\n padding:10px;\n box-sizing:border-box;\n }", options: ["100px total", "120px", "110px", "error"], answer: 0 },
+            { question: "Which has highest specificity?", options: ["#id", ".class", "tag", "*"], answer: 0 },
+            { question: "What is output? \n div {\n position:fixed;\n bottom:0;\n width:100%;\n }", options: ["stick bottom", "scroll", "top", "none"], answer: 0 },
+            { question: "Flex vs Grid?", options: ["1D vs 2D", "same", "2D vs 1D", "none"], answer: 0 },
+            { question: "What is output? \n div {\n transform:scale(2);\n }", options: ["double size", "half", "rotate", "none"], answer: 0 },
+            { question: "Which property for animation?", options: ["animation", "effect", "move", "style"], answer: 0 },
+            { question: "What is output? \n div {\n display:inline-block;\n width:100px;\n }", options: ["inline+block", "block only", "inline only", "none"], answer: 0 },
+            { question: "Which is pseudo element?", options: ["::before", ":hover", "#id", ".class"], answer: 0 },
+            { question: "What is output? \n div {\n position:absolute;\n top:0;\n left:0;\n }", options: ["top-left", "center", "bottom", "none"], answer: 0 },
+            { question: "Which property centers flex?", options: ["justify-content", "align", "center", "middle"], answer: 0 }
+        ];
+
+        let level = localStorage.getItem("level");
+
+        let questions;
+
+        if (level === "easy") {
+            questions = easyQuestions;
+        }
+        else if (level === "medium") {
+            questions = mediumQuestions;
+        }
+        else if (level === "hard") {
+            questions = hardQuestions;
+        }
+        else {
+            alert("Please select level first");
+            window.location.href = "level.html";
+        }
+        let index = 0;
+        let userAnswers = [];
+
+        function loadQuestion() {
+            let q = questions[index];
+
+            $("#questionBox").fadeOut(200, function () {
+                document.getElementById("qno").innerText = "Question " + (index + 1) + "/" + questions.length;
+                document.getElementById("question").innerText = q.question;
+
+                let html = "";
+                for (let i = 0; i < q.options.length; i++) {
+                    let checked = userAnswers[index] == i ? "checked" : "";
+                    html += "<label>" +
+                        "<input type='radio' name='ans' " + checked + " onclick='selectOption(" + i + ")'>" +
+                        q.options[i] +
+                        "</label>";
+                }
+
+                document.getElementById("options").innerHTML = html;
+                $("#questionBox").fadeIn(200);
+            });
+
+            if (index == 0) {
+                document.getElementById("prevButton").style.display = "none";
+            } else {
+                document.getElementById("prevButton").style.display = "inline-block";
+            }
+
+            if (index == questions.length - 1) {
+                document.getElementById("nextButton").style.display = "none";
+                document.getElementById("submitButton").style.display = "inline-block";
+            } else {
+                document.getElementById("nextButton").style.display = "inline-block";
+                document.getElementById("submitButton").style.display = "none";
+            }
+        }
+
+        function selectOption(i) {
+            userAnswers[index] = i;
+        }
+
+        function next() {
+            if (index < questions.length - 1) {
+                index++;
+                loadQuestion();
+            }
+        }
+
+        function prev() {
+            if (index > 0) {
+                index--;
+                loadQuestion();
+            }
+        }
+
+        function submitQuiz() {
+            stopTimer();
+            let score = 0;
+
+            for (let i = 0; i < questions.length; i++) {
+                if (userAnswers[i] == undefined) {
+                    alert("Please answer all questions before submitting.");
+                    return;
+                }
+            }
+
+            for (let i = 0; i < questions.length; i++) {
+                if (questions[i].answer == userAnswers[i]) {
+                    score++;
+                }
+            }
+
+            localStorage.setItem("score", score);
+            localStorage.setItem("total", questions.length);
+
+            let timeTaken = (5 * 60) - totalTime;
+            localStorage.setItem("score", score);
+            localStorage.setItem("total", questions.length);
+            localStorage.setItem("timeTaken", timeTaken);
+
+            window.location.href = "result.html";
+        }
+
+        window.onload = function () {
+            document.getElementById("submitButton").style.display = "none";
+            loadQuestion();
+            startTimer();
+        }
+    </script>
+</body>
+
+</html>

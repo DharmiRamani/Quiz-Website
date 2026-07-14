@@ -1,0 +1,136 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overscroll-behavior-y: none;
+    background: #f5f7ff;
+}
+
+/*Main content*/
+.content {
+    color: #598392;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-bottom: 50px;
+}
+
+/* Develop skills */
+.title {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-weight: 800;
+    font-size: 3.5rem;
+    line-height: 1.2;
+    color: #5b7772;
+}
+
+hr {
+    border: none;
+    height: 3px;
+    background: linear-gradient(90deg, #3498db 0%, #9b59b6 100%);
+    margin: 1.5rem 0 2rem 0;
+    border-radius: 2px;
+}
+
+/* How It Works */
+.how-it-works {
+    padding: 10px 0 60px 0;
+}
+
+.title-work {
+    text-align: center;
+    margin-bottom: 50px;
+    font-size: 2.5rem;
+    color: #5b7772;
+}
+
+.steps {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.step {
+    flex: 1;
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.step-number {
+    width: 50px;
+    height: 50px;
+    background-color: #4cc9f0;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 auto 20px;
+}
+
+.step h3 {
+    margin-bottom: 15px;
+    color: #5b7772;
+}
+
+
+/* Main Content */
+.box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 50px;
+}
+
+.main-box {
+    max-width: 700px;
+    background: rgba(89, 131, 146, 0.3);
+    backdrop-filter: blur(10px);
+    padding: 50px 30px;
+    border-radius: 18px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+}
+
+/*girl image*/
+.img {
+    height: auto;
+    width: 250px;
+    object-fit: contain;
+    filter: drop-shadow(0 12px 25px rgba(0, 0, 0, 0.35));
+}
+
+.title-learn {
+    font-size: 40px;
+    padding-bottom: 20px;
+    color: #5b7772;
+}
+
+/* let's go Button */
+.start-btn {
+    background-color: #bf8808;
+    color: white;
+    border: none;
+    padding: 14px 45px;
+    font-size: 18px;
+    border-radius: 30px;
+    transition: 0.3s;
+}
+
+.start-btn:hover {
+    transform: scale(1.07);
+    background: #eff6e0;
+    color: #bf8808;
+    box-shadow: 0px 10px 20px rgb(255, 255, 255, 0.2);
+    border: 1px solid #bf8808;
+}
+
+/* change this name img-fluid */

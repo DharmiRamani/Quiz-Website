@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Question</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="quiz_que.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="timer.js"></script>
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <div class="quiz-title">
+                <h3><img src="./images/confuse_boy.png"> Python Quiz</h3>
+            </div>
+            <div class="timer">Time Left: <span id="time">05:00</span></div>
+        </div>
+    </header>
+    <!-- QUESTION SECTION -->
+    <section class="mt-5">
+        <div class="question" id="questionBox">
+            <h5 id="qno">Question 1/3</h5>
+            <h4 id="question"></h4>
+
+            <div class="options" id="options"></div>
+
+            <div class="d-flex justify-content-between mt-3">
+                <button class="btn btn-prev" id="prevButton" onclick="prev()">Previous</button>
+                <button class="btn btn-next" id="nextButton" onclick="next()">Next</button>
+                <button class="btn btn-submit" id="submitButton" onclick="submitQuiz()">Submit</button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const easyQuestions = [
+            { question: "What is the output of print(type(10))?", options: ["<class 'int'>", "int", "number", "integer"], answer: 0 },
+            { question: "Which symbol is used for comments?", options: ["//", "#", "/* */", "<!-- -->"], answer: 1 },
+            { question: "Which data type is mutable?", options: ["tuple", "string", "list", "int"], answer: 2 },
+            { question: "What is len([1,2,3])?", options: ["2", "3", "1", "error"], answer: 1 },
+            { question: "Which keyword is used for function?", options: ["function", "def", "fun", "define"], answer: 1 },
+            { question: "print(2+3*2) = ?", options: ["10", "8", "7", "12"], answer: 1 },
+            { question: "Which is correct variable?", options: ["1var", "_var", "@var", "#var"], answer: 1 },
+            { question: "Python is?", options: ["compiled", "interpreted", "machine", "none"], answer: 1 },
+            { question: "Which is not datatype?", options: ["int", "float", "double", "str"], answer: 2 },
+            { question: "print(bool(0)) = ?", options: ["True", "False", "0", "None"], answer: 1 }
+        ];
+
+        const mediumQuestions = [
+            { question: "What is output? \n a=[1,2]; b=a; b.append(3); print(a)", options: ["[1,2]", "[1,2,3]", "[3]", "error"], answer: 1 },
+            { question: "Difference between list and tuple?", options: ["mutable", "immutable", "both", "none"], answer: 0 },
+            { question: "What is output? \n print('5' + '2')", options: ["7", "52", "error", "None"], answer: 1 },
+            { question: "Which function converts string to int?", options: ["str()", "int()", "float()", "eval()"], answer: 1 },
+            { question: "What is slicing? \n a='hello'; print(a[1:4])", options: ["hel", "ell", "llo", "error"], answer: 1 },
+            { question: "Which loop runs fixed times?", options: ["while", "for", "do while", "none"], answer: 1 },
+            { question: "What is output? \n print(type([]))", options: ["list", "<class 'list'>", "array", "object"], answer: 1 },
+            { question: "Which keyword is for exception?", options: ["catch", "try", "error", "final"], answer: 1 },
+            { question: "What is output? \n print(10//3)", options: ["3.3", "3", "4", "error"], answer: 1 },
+            { question: "Which is correct?", options: ["elif", "elseif", "else if", "ifelse"], answer: 0 }
+        ];
+
+        const hardQuestions = [
+            { question: "What is output? \n def func(x=[]):\n x.append(1)\n print(x)\n func(); func();", options: ["[1] [1]", "[1] [1,1]", "[1,1] [1]", "error"], answer: 1 },
+            { question: "What is output? \n a = (1,2,3)\n print(a[1])", options: ["1", "2", "3", "error"], answer: 1 },
+            { question: "What is output? \n print({1,2,2,3})", options: ["{1,2,2,3}", "{1,2,3}", "[1,2,3]", "error"], answer: 1 },
+            { question: "What is output? \n print(bool('False'))", options: ["False", "True", "0", "error"], answer: 1 },
+            { question: "What is output? \n print(0.1+0.2==0.3)", options: ["True", "False", "error", "None"], answer: 1 },
+            { question: "What is output? \n x = lambda a: a+10\n print(x(5))", options: ["15", "10", "5", "error"], answer: 0 },
+            { question: "What is output? \n print(list(range(3)))", options: ["[1,2,3]", "[0,1,2]", "[0,1,2,3]", "error"], answer: 1 },
+            { question: "What is output? \n print(type({}))", options: ["dict", "<class 'dict'>", "object", "map"], answer: 1 },
+            { question: "What is output? \n print('a'*3)", options: ["aaa", "a3", "error", "None"], answer: 0 },
+            { question: "What is output? \n print(5 is 5)", options: ["True", "False", "error", "None"], answer: 0 }
+        ];
+        let level = localStorage.getItem("level");
+
+        let questions;
+
+        if (level === "easy") {
+            questions = easyQuestions;
+        }
+        else if (level === "medium") {
+            questions = mediumQuestions;
+        }
+        else if (level === "hard") {
+            questions = hardQuestions;
+        }
+        else {
+            alert("Please select level first");
+            window.location.href = "level.html";
+        }
+        let index = 0;
+        let userAnswers = [];
+
+        function loadQuestion() {
+            let q = questions[index];
+
+            $("#questionBox").fadeOut(200, function () {
+                document.getElementById("qno").innerText = "Question " + (index + 1) + "/" + questions.length;
+                document.getElementById("question").innerText = q.question;
+
+                let html = "";
+                for (let i = 0; i < q.options.length; i++) {
+                    let checked = userAnswers[index] == i ? "checked" : "";
+                    html += "<label>" +
+                        "<input type='radio' name='ans' " + checked + " onclick='selectOption(" + i + ")'>" +
+                        q.options[i] +
+                        "</label>";
+                }
+
+                document.getElementById("options").innerHTML = html;
+                $("#questionBox").fadeIn(200);
+            });
+
+            if (index == 0) {
+                document.getElementById("prevButton").style.display = "none";
+            } else {
+                document.getElementById("prevButton").style.display = "inline-block";
+            }
+
+            if (index == questions.length - 1) {
+                document.getElementById("nextButton").style.display = "none";
+                document.getElementById("submitButton").style.display = "inline-block";
+            } else {
+                document.getElementById("nextButton").style.display = "inline-block";
+                document.getElementById("submitButton").style.display = "none";
+            }
+        }
+
+        function selectOption(i) {
+            userAnswers[index] = i;
+        }
+
+        function next() {
+            if (index < questions.length - 1) {
+                index++;
+                loadQuestion();
+            }
+        }
+
+        function prev() {
+            if (index > 0) {
+                index--;
+                loadQuestion();
+            }
+        }
+
+        function submitQuiz() {
+            stopTimer();
+            let score = 0;
+
+            for (let i = 0; i < questions.length; i++) {
+                if (userAnswers[i] == undefined) {
+                    alert("Please answer all questions before submitting.");
+                    return;
+                }
+            }
+
+            for (let i = 0; i < questions.length; i++) {
+                if (questions[i].answer == userAnswers[i]) {
+                    score++;
+                }
+            }
+
+            localStorage.setItem("score", score);
+            localStorage.setItem("total", questions.length);
+
+            let timeTaken = (5 * 60) - totalTime;
+            localStorage.setItem("score", score);
+            localStorage.setItem("total", questions.length);
+            localStorage.setItem("timeTaken", timeTaken);
+
+            window.location.href = "result.html";
+        }
+
+        window.onload = function () {
+            document.getElementById("submitButton").style.display = "none";
+            loadQuestion();
+            startTimer();
+        }
+    </script>
+</body>
+
+</html>

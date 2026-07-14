@@ -1,0 +1,163 @@
+/* --Navigation--- */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+header {
+    background-color: white;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    color:  #415652;
+    font-size: 30px;
+    font-weight: 800;
+    font-family: Cooper Black;
+    letter-spacing: 1px;
+}
+
+.logo img {
+    height: 60px;
+    width: auto;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #787777;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #5875f3;
+}
+
+.active {
+    border-radius: 4px;
+    background: rgba(146, 208, 233, 0.304);
+    color: white;
+    padding: 8px 12px;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.profile img {
+    height: auto;
+    width: 35px;
+    border: 2px solid #5b7772;
+    border-radius: 30px;
+    padding: 2px;
+    object-fit: cover;
+}
+
+.profile-btn {
+    /* background-color: #ecf0ff; */
+    background-color: white;
+    color: #787777;
+    padding: 8px 20px;
+    font-weight: 600;
+    border: 1px solid #787777;
+    border-radius: 30px;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.profile-btn:hover {
+    border: 1.5px solid #cb9e35;
+    border-radius: 10px;
+    background: white;
+    color: #cb9e35;
+}
+
+/* --Footer-- */
+footer {
+    background-color: #283d3b;
+    padding: 60px 0 10px;
+    margin-top: 60px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin-bottom: 30px;
+    color: #aaa;
+}
+
+.footer-column {
+    flex: 1;
+    min-width: 250px;
+}
+
+.footer-column h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+/* Google , Facebook , instagram*/
+.social {
+    display: flex;
+    justify-content: left;
+    gap: 15px;
+}
+
+.social-img {
+    width: 45px;
+    height: 45px;
+    padding: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.social-img:hover {
+    transform: translateY(-2px);
+}
+
+.copyright {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: #aaa;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}

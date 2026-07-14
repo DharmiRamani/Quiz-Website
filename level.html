@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Level</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!--icon-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> 
+    <link href="nav_footer.css" rel="stylesheet">
+    <link href="level.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="./images/logo2.png"> STACKQUIZ
+                </div>
+
+                <ul class="nav-links">
+                    <li><a href="index.html"><i class="fas fa-home me-1"></i> Home</a></li>
+                    <li><a href="categories.html"><i class="fas fa-compass me-1"></i> Categories</a></li>
+                    <li><a href="result.html"><i class="fas fa-chart-line me-1"></i> Result</a></li>
+                </ul>
+
+                <div class="profile">
+                    <button class="profile-btn"><img src="./images/user-profile.png"> Profile</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- LEVEL SECTION -->
+    <section>
+        <div class="container">
+            <h2 class="title"><img src="./images/bar-char_gif.gif">&nbsp;Select Difficulty Level</h2>
+
+            <div class="row g-4 justify-content-center">
+
+                <!-- EASY -->
+                <div class="col-md-4 col-sm-6 d-flex justify-content-center">
+                    <div class="level">
+                        <div class="level_LOGO"><img src="./images/smile2.webp" class="level-logo"></div>
+                        <h4>Easy</h4>
+                        <p class="small">Beginner friendly questions</p>
+                        <a href="#" class="start-btn easy" onclick="setLevel('easy')">Start Easy</a>
+                    </div>
+                </div>
+                <!-- MEDIUM -->
+                <div class="col-md-4 col-sm-6 d-flex justify-content-center">
+                    <div class="level">
+                        <div class="level_LOGO"><img src="./images/light.webp" class="level-logo"></div>
+                        <h4>Medium</h4>
+                        <p class="small">Test your core concepts</p>
+                        <a href="#" class="start-btn medium" onclick="setLevel('medium')">Start Medium</a>
+                    </div>
+                </div>
+                <!-- HARD -->
+                <div class="col-md-4 col-sm-6 d-flex justify-content-center">
+                    <div class="level">
+                        <div class="level_LOGO"><img src="./images/fire.webp" class="level-logo"></div>
+                        <h4>Hard</h4>
+                        <p class="small">Advanced & tricky questions</p>
+                        <a href="#" class="start-btn hard" onclick="setLevel('hard')">Start Hard</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>QuizMaster</h3>
+                    <p>Your ultimate destination for fun and challenging quizzes. Test your knowledge, learn new facts,
+                        and
+                        compete with friends.</p>
+                    <div class="social">
+                        <img src="./images/google.png" alt="Google Logo" class="social-img">
+                        <img src="./images/facebook.png" alt="Google Logo" class="social-img">
+                        <img src="./images/instagram.png" alt="Google Logo" class="social-img">
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <p>Home</p>
+                    <p>Quiz</p>
+                    <p>Result</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Categories</h3>
+                    <p>Javascript</p>
+                    <p>Python</p>
+                    <p>HTML</p>
+                    <p>CSS</p>
+                    <p>React</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <p>support@quizmaster.com</p>
+                    <p> +1 (555) 123-4567</p>
+                    <p>123 Quiz Street, Knowledge City</p>
+                </div>
+            </div>
+
+            <div class="copyright">
+                <p>&copy; 2026 <strong>QuizStack</strong> | All Rights Reserved</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="text/javaScript">
+        function setLevel(level) {
+            localStorage.setItem("level", level);
+
+            let subject = localStorage.getItem("subject");
+
+            if (subject == "javascript") {
+                window.location.href = "javascript_question.html";
+            } 
+            else if (subject == "python") {
+                window.location.href = "python_question.html";
+            } 
+            else if (subject == "html") {
+                window.location.href = "html_question.html";
+            } 
+            else if (subject == "css") {
+                window.location.href = "css_question.html";
+            }
+            else{
+                window.location.href = "react_question.html";
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

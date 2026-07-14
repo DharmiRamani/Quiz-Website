@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Question</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="quiz_que.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="timer.js"></script>
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <div class="quiz-title">
+                <h3><img src="./images/confuse_boy.png"> React Quiz</h3>
+            </div>
+            <div class="timer">Time Left: <span id="time">05:00</span></div>
+        </div>
+    </header>
+    <!-- QUESTION SECTION -->
+    <section class="mt-5">
+        <div class="question" id="questionBox">
+            <h5 id="qno">Question 1/3</h5>
+            <h4 id="question"></h4>
+
+            <div class="options" id="options"></div>
+
+            <div class="d-flex justify-content-between mt-3">
+                <button class="btn btn-prev" id="prevButton" onclick="prev()">Previous</button>
+                <button class="btn btn-next" id="nextButton" onclick="next()">Next</button>
+                <button class="btn btn-submit" id="submitButton" onclick="submitQuiz()">Submit</button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const easyQuestions = [
+            { question: "React is?", options: ["library", "language", "framework", "tool"], answer: 0 },
+            { question: "Which is JSX?", options: ["HTML in JS", "CSS", "JSON", "XML"], answer: 0 },
+            { question: "What is output? \n function App(){\n return <h1>Hello</h1>\n }", options: ["Hello", "error", "null", "none"], answer: 0 },
+            { question: "Which hook is used for state?", options: ["useState", "useEffect", "useRef", "useMemo"], answer: 0 },
+            { question: "What is output? \n const a=5;\n return <p>{a}</p>;", options: ["5", "a", "error", "none"], answer: 0 },
+            { question: "Component name starts with?", options: ["capital", "small", "number", "symbol"], answer: 0 },
+            { question: "Which is correct render?", options: ["ReactDOM.render()", "render()", "display()", "show()"], answer: 0 },
+            { question: "What is output? \n return <div>Hi</div>", options: ["Hi", "error", "null", "none"], answer: 0 },
+            { question: "Which is event?", options: ["onClick", "click()", "onclick()", "event()"], answer: 0 },
+            { question: "React uses?", options: ["virtual DOM", "real DOM", "XML", "none"], answer: 0 }
+        ];
+
+        const mediumQuestions = [
+            { question: "Difference props vs state?", options: ["read vs write", "same", "write vs read", "none"], answer: 0 },
+            { question: "What is output? \n function App(){\n return <h1>{2+3}</h1>\n }", options: ["5", "23", "error", "none"], answer: 0 },
+            { question: "Which hook runs on mount?", options: ["useEffect", "useState", "useRef", "none"], answer: 0 },
+            { question: "What is output? \n const [a,setA]=useState(1);\n setA(2);", options: ["state update", "error", "1", "none"], answer: 0 },
+            { question: "Which is key prop?", options: ["unique id", "style", "class", "none"], answer: 0 },
+            { question: "What is output? \n return <>{'Hi'}</>", options: ["Hi", "error", "null", "none"], answer: 0 },
+            { question: "Which is fragment?", options: ["<> </>", "<div>", "<p>", "<span>"], answer: 0 },
+            { question: "What is output? \n function App(){\n return <button>Click</button>\n }", options: ["button", "text", "error", "none"], answer: 0 },
+            { question: "Which is controlled component?", options: ["state based", "DOM", "CSS", "none"], answer: 0 },
+            { question: "What is output? \n const a=[1,2];\n return a.map(x=><p>{x}</p>)", options: ["1 2", "array", "error", "none"], answer: 0 }
+        ];
+
+        const hardQuestions = [
+            { question: "What is output? \n const [c,setC]=useState(0);\n setC(c+1);\n setC(c+1);", options: ["1", "2", "0", "error"], answer: 0 },
+            { question: "Which hook avoids re-render?", options: ["useRef", "useState", "useEffect", "none"], answer: 0 },
+            { question: "What is output? \n function App(){\n return <h1>{true && 'Hi'}</h1>\n }", options: ["Hi", "true", "false", "none"], answer: 0 },
+            { question: "Which is memoization?", options: ["useMemo", "useState", "useRef", "none"], answer: 0 },
+            { question: "What is output? \n const a=()=>{\n return <h1>Hello</h1>\n }", options: ["Hello", "error", "null", "none"], answer: 0 },
+            { question: "Which is lifecycle alternative?", options: ["useEffect", "useState", "useRef", "none"], answer: 0 },
+            { question: "What is output? \n function App(){\n return <h1>{0 && 'Hi'}</h1>\n }", options: ["0", "Hi", "error", "none"], answer: 0 },
+            { question: "Which improves performance?", options: ["React.memo", "useState", "useEffect", "none"], answer: 0 },
+            { question: "What is output? \n const a=[1,2,3];\n return a.filter(x=>x>1)", options: ["[2,3]", "[1]", "error", "none"], answer: 0 },
+            { question: "Which is routing lib?", options: ["react-router", "redux", "axios", "none"], answer: 0 }
+        ];
+
+        let level = localStorage.getItem("level");
+
+        let questions;
+
+        if (level === "easy") {
+            questions = easyQuestions;
+        }
+        else if (level === "medium") {
+            questions = mediumQuestions;
+        }
+        else if (level === "hard") {
+            questions = hardQuestions;
+        }
+        else {
+            alert("Please select level first");
+            window.location.href = "level.html";
+        }
+        let index = 0;
+        let userAnswers = [];
+
+        function loadQuestion() {
+            let q = questions[index];
+
+            $("#questionBox").fadeOut(200, function () {
+                document.getElementById("qno").innerText = "Question " + (index + 1) + "/" + questions.length;
+                document.getElementById("question").innerText = q.question;
+
+                let html = "";
+                for (let i = 0; i < q.options.length; i++) {
+                    let checked = userAnswers[index] == i ? "checked" : "";
+                    html += "<label>" +
+                        "<input type='radio' name='ans' " + checked + " onclick='selectOption(" + i + ")'>" +
+                        q.options[i] +
+                        "</label>";
+                }
+
+                document.getElementById("options").innerHTML = html;
+                $("#questionBox").fadeIn(200);
+            });
+
+            if (index == 0) {
+                document.getElementById("prevButton").style.display = "none";
+            } else {
+                document.getElementById("prevButton").style.display = "inline-block";
+            }
+
+            if (index == questions.length - 1) {
+                document.getElementById("nextButton").style.display = "none";
+                document.getElementById("submitButton").style.display = "inline-block";
+            } else {
+                document.getElementById("nextButton").style.display = "inline-block";
+                document.getElementById("submitButton").style.display = "none";
+            }
+        }
+
+        function selectOption(i) {
+            userAnswers[index] = i;
+        }
+
+        function next() {
+            if (index < questions.length - 1) {
+                index++;
+                loadQuestion();
+            }
+        }
+
+        function prev() {
+            if (index > 0) {
+                index--;
+                loadQuestion();
+            }
+        }
+
+        function submitQuiz() {
+            stopTimer();
+            let score = 0;
+
+            for (let i = 0; i < questions.length; i++) {
+                if (userAnswers[i] == undefined) {
+                    alert("Please answer all questions before submitting.");
+                    return;
+                }
+            }
+
+            for (let i = 0; i < questions.length; i++) {
+                if (questions[i].answer == userAnswers[i]) {
+                    score++;
+                }
+            }
+
+            localStorage.setItem("score", score);
+            localStorage.setItem("total", questions.length);
+
+            let timeTaken = (5 * 60) - totalTime;
+            localStorage.setItem("score", score);
+            localStorage.setItem("total", questions.length);
+            localStorage.setItem("timeTaken", timeTaken);
+
+            window.location.href = "result.html";
+        }
+
+        window.onload = function () {
+            document.getElementById("submitButton").style.display = "none";
+            loadQuestion();
+            startTimer();
+        }
+    </script>
+</body>
+
+</html>
